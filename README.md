@@ -21,6 +21,13 @@ This is a Docker-Image for Atlassian JIRA Core based on [Alpine Linux](http://al
 ## Ports
 * 8080
 
+## Build conatiner
+Specify the application version in the build command:
+
+```bash
+docker build --build-arg VERSION=x.x.x .                                                        
+```
+
 ## Getting started
 
 Run JIRA Core standalone and navigate to `http://[dockerhost]:8080` to finish configuration:
@@ -35,7 +42,7 @@ Run JIRA Core standalone with customised jvm settings and navigate to `http://[d
 docker run -tid -p 8080:8080 -e JVM_MEMORY_MIN=2g -e JVM_MEMORY_MAX=4g seibertmedia/atlassian-jira-core:latest
 ```
 
-Specify persistent volume for JIRA Core data directory and redirect application logs to stdout:
+Specify persistent volume for JIRA Core data directory:
 
 ```bash
 docker run -tid -p 8080:8080 -v jira_data:/var/opt/atlassian/application-data/jira seibertmedia/atlassian-jira-core:latest
