@@ -21,51 +21,51 @@ RUN set -x \
   && rm -rf /var/cache/apk/*
 
 RUN set -x \
-  && mkdir -p $JIRA_INST \
-  && mkdir -p $JIRA_HOME
+  && mkdir -p ${JIRA_INST} \
+  && mkdir -p ${JIRA_HOME}
 
 RUN set -x \
-  && mkdir -p /home/$SYSTEM_USER \
-  && addgroup -S $SYSTEM_GROUP \
-  && adduser -S -D -G $SYSTEM_GROUP -h $SYSTEM_GROUP -s /bin/sh $SYSTEM_USER \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP /home/$SYSTEM_USER
+  && mkdir -p /home/${SYSTEM_USER} \
+  && addgroup -S ${SYSTEM_GROUP} \
+  && adduser -S -D -G ${SYSTEM_GROUP} -h ${SYSTEM_GROUP} -s /bin/sh ${SYSTEM_USER} \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} /home/${SYSTEM_USER}
 
 RUN set -x \
-  && wget -O /tmp/atlassian-jira-core-$VERSION.tar.gz https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-$VERSION.tar.gz \
-  && tar xfz /tmp/atlassian-jira-core-$VERSION.tar.gz --strip-components=1 -C $JIRA_INST \
-  && rm /tmp/atlassian-jira-core-$VERSION.tar.gz \
+  && wget -O /tmp/atlassian-jira-core-${VERSION}.tar.gz https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-${VERSION}.tar.gz \
+  && tar xfz /tmp/atlassian-jira-core-${VERSION}.tar.gz --strip-components=1 -C ${JIRA_INST} \
+  && rm /tmp/atlassian-jira-core-${VERSION}.tar.gz \
   && chmod -R 700 "${JIRA_INST}/conf" \
   && chmod -R 700 "${JIRA_INST}/logs" \
   && chmod -R 700 "${JIRA_INST}/temp" \
   && chmod -R 700 "${JIRA_INST}/work" \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/conf" \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/logs" \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/temp" \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/work" \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP $JIRA_HOME
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${JIRA_INST}/conf" \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${JIRA_INST}/logs" \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${JIRA_INST}/temp" \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${JIRA_INST}/work" \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${JIRA_HOME}
 
 RUN set -x \
-  && wget -O /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz \
-  && tar xfz /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz mysql-connector-java-$MYSQL_JDBC_VERSION/mysql-connector-java-$MYSQL_JDBC_VERSION-bin.jar -C $JIRA_INST/atlassian-jira/WEB-INF/lib/ \
-  && rm /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz
+  && wget -O /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz \
+  && tar xfz /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz mysql-connector-java-${MYSQL_JDBC_VERSION}/mysql-connector-java-${MYSQL_JDBC_VERSION}-bin.jar -C ${JIRA_INST}/atlassian-jira/WEB-INF/lib/ \
+  && rm /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz
 
 RUN set -x \
-  && touch -d "@0" "$JIRA_INST/conf/server.xml" \
-  && touch -d "@0" "$JIRA_INST/bin/setenv.sh" \
-  && touch -d "@0" "$JIRA_INST/atlassian-jira/WEB-INF/classes/jira-application.properties"
+  && touch -d "@0" "${JIRA_INST}/conf/server.xml" \
+  && touch -d "@0" "${JIRA_INST}/bin/setenv.sh" \
+  && touch -d "@0" "${JIRA_INST}/atlassian-jira/WEB-INF/classes/jira-application.properties"
 
 ADD files/service /usr/local/bin/service
 ADD files/entrypoint /usr/local/bin/entrypoint
 
 RUN set -x \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/service \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/entrypoint
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} /usr/local/bin/service \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} /usr/local/bin/entrypoint
 
 EXPOSE 8080
 
-USER $SYSTEM_USER
+USER ${SYSTEM_USER}
 
-VOLUME $JIRA_HOME
+VOLUME ${JIRA_HOME}
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 
